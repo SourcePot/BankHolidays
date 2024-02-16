@@ -5,7 +5,7 @@ If no argument is provided method getBankHolidays() returns at least the bank ho
 
 File `./www/index.php` can be used to play with the methods of classes de and uk.
 You can install the www-project using composer: `composer create-project sourcepot/bankholidays {target dir}`
-Just set your www-root directory to `{target dir}/www/`.
+Just set your www-root directory to `{target dir}/src/www/`.
 
 ## How to use the PHP classes?
 
