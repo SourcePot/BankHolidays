@@ -19,6 +19,6 @@ For bank holidays of the United Kongdom you can instantiate class uk as follows:
 
 `$bankHolidaysUK = $uk->getBankHolidays();`
 
-$bankHolidaysUK will then contain an associative array with the bank holidays of the past, current and next year:
+$bankHolidaysUK will then return an associative array with the bank holidays of the past, current and next year:
 
 ![Web page screenshot](./assets/uk-sample-result.png)
