@@ -7,7 +7,7 @@
 	
 declare(strict_types=1);
 	
-namespace SourcePot\Bankholidays;
+namespace SourcePot\BankHolidays;
 	
 mb_internal_encoding("UTF-8");
 

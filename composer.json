@@ -1,8 +1,8 @@
 {
-    "name":"sourcepot/ops",
+    "name":"sourcepot/bankholidays",
     "type":"library",
-    "description":"Bankholidays for the UK and Germany",
-    "keywords":["Bankholiday"],
+    "description":"Bank holidays for the UK and Germany",
+    "keywords":["Bank holiday"],
     "homepage":"https://datapool.info",
     "license":"MIT",
     "authors":[{"name":"Carsten Wallenhauer","email":"admin@datapool.info"}],
@@ -12,7 +12,7 @@
     },
     "autoload":{
         "psr-4":{
-            "SourcePot\\Bankholidays\\":"src\\php"
+            "SourcePot\\BankHolidays\\":"src\\php"
         }
     }
 }

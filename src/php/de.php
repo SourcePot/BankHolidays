@@ -8,7 +8,7 @@
 */
 declare(strict_types=1);
 
-namespace SourcePot\Bankholidays;
+namespace SourcePot\BankHolidays;
 
 class de{
     

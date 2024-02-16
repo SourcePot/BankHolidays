@@ -8,7 +8,7 @@
 */
 declare(strict_types=1);
 
-namespace SourcePot\Bankholidays;
+namespace SourcePot\BankHolidays;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
