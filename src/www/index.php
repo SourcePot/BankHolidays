@@ -1,5 +1,5 @@
 <?php
-/*
+/*  Test page
 * @author Carsten Wallenhauer <admin@datapool.info>
 * @copyright 2023 to today Carsten Wallenhauer
 * @license https://opensource.org/license/mit/ MIT
@@ -12,15 +12,14 @@ namespace SourcePot\Bankholidays;
 mb_internal_encoding("UTF-8");
 
 require_once('../../vendor/autoload.php');
+
 require_once('../php/uk.php');
-require_once('../php/de.php');
-
 $uk=new uk();
-var_dump($uk->getBankHolidays());
+$bankHolidaysUK=$uk->getBankHolidays();
 
-/*
+require_once('../php/de.php');
 $de=new de();
-var_dump($de->getBankHolidays());
-*/
+$bankHolidaysDE=$de->getBankHolidays();
 
+var_dump($bankHolidaysUK);
 ?>

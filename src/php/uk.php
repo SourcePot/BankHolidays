@@ -11,9 +11,7 @@ declare(strict_types=1);
 namespace SourcePot\Bankholidays;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Promise;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Stream\Stream;
 
 class uk{
 
