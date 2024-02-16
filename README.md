@@ -11,8 +11,8 @@ For bank holidays of the United Kongdom you can instantiate class uk as follows:
 
 `require_once('../php/uk.php');`
 
-`$uk=new uk();`
+`$uk = new uk();`
 
-`$bankHolidaysUK=$uk->getBankHolidays();`
+`$bankHolidaysUK = $uk->getBankHolidays();`
 
-$bankHolidaysUK will then contain an associative array with the bank holidays of the past, current and next year.
+$bankHolidaysUK will then contain an associative array with the bank holidays of the past, current and next year:
