@@ -6,4 +6,7 @@ If no argumenmt is provided method getBankHolidays() returns at least the bank h
 ## How to use the PHP classes?
 
 For bank holidays of the United Kongdom you can instantiate class uk as follows:
-`require_once('../../vendor/autoload.php'); require_once('../php/uk.php');$uk=new uk();$bankHolidaysUK=$uk->getBankHolidays();`
+`require_once('../../vendor/autoload.php');`
+`require_once('../php/uk.php');`
+`$uk=new uk();`
+`$bankHolidaysUK=$uk->getBankHolidays();`
