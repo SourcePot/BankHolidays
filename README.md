@@ -19,6 +19,8 @@ For bank holidays of the United Kongdom you can instantiate class uk as follows:
 
 `$bankHolidaysUK = $uk->getBankHolidays();`
 
+## Example
+
 $bankHolidaysUK will then return an associative array with the bank holidays of the past, current and next year (see the example below).
 The keys of the associative array are: *array({country}=>array({eventId},...),...)* The sub-keys *{Event}* and *{Location/Destination}* are compatible with the Content of a Datapool calendar entry.
 *{eventId}* can be used as *EntryId* of a Datapool calendar entry.
