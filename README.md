@@ -1,7 +1,9 @@
 # Bank Holidays
 
 The respository contains one PHP class per country. These classes contain the method getBankHolidays() which returns an array with the bank holidays.
-If no argument is provided method getBankHolidays(), returns at least the bank holidays of the current year.
+If no argument is provided, method getBankHolidays() returns at least the bank holidays of the current year.
+
+Depending on the country a goverment internet resource is used (such as *Gov.uk*) or dates are derived from rules without the use of an internet resource (such as for Germamny).
 
 File `./www/index.php` can be used to play with the methods of classes *de* and *uk*.
 You can install the www-project using composer: `composer create-project sourcepot/bankholidays {target dir}`
