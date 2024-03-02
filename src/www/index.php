@@ -22,12 +22,9 @@ require_once('../php/de.php');
 $de=new de();
 $bankHolidaysDE=$de->getBankHolidays();
 */
-require_once('../php/uk.php');
-$de=new uk();
+require_once('../php/es.php');
+$de=new es();
 $bankHolidays=$de->getBankHolidays();
-
-$content=json_encode($bankHolidays);
-file_put_contents('D:\sample.json',$content);
 
 var_dump($bankHolidays);
 ?>
