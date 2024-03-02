@@ -26,5 +26,8 @@ require_once('../php/uk.php');
 $de=new uk();
 $bankHolidays=$de->getBankHolidays();
 
+$content=json_encode($bankHolidays);
+file_put_contents('D:\sample.json',$content);
+
 var_dump($bankHolidays);
 ?>

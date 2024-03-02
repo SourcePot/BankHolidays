@@ -24,9 +24,6 @@ class es{
                           'Day of the Balearic Islands'=>array('date'=>'-03-01','states'=>array('Balearic Island')),
                           'Fifth Of March'=>array('date'=>'-03-05','states'=>array('Zaragoza')),
                           'St. Joseph’s Day'=>array('date'=>'-03-19','states'=>array('Murcia','Valencia')),
-                          
-                          
-                          
                           'Holy Thursday'=>array('method'=>'addHolyThursday','states'=>array('Andalusia','Aragon','Asturias','Balearic Islands','Basque Country','Canary Islands','Cantabria','Castile and León','Castilla-La Mancha','Extremadura','Galicia','La Rioja','Madrid','Murcia','Navarre','Valencia','Ceuta','Melilla')),
                           'Good Friday'=>array('method'=>'addGoodFriday'),
                           'Easter Monday'=>array('method'=>'addEasterMonday','states'=>array('Balearic Islands','Basque Country','Catalonia','La Rioja','Navarre','Valencia')),
@@ -37,18 +34,13 @@ class es{
                           'Galician Literature Day'=>array('date'=>'-05-17','states'=>array('Galicia')),
                           'Day of the Canary Islands'=>array('date'=>'-05-30','states'=>array('Canary Islands')),
                           'Day of Castilla-La Mancha'=>array('date'=>'-05-31','states'=>array('Castilla-La Mancha')),
-                          
                           'Whitsunday'=>array('method'=>'addWhitsunday'),
                           'Whitmonday'=>array('method'=>'addWhitmonday','states'=>array('Catalonia')),
-                          
                           'Day of Murcia'=>array('date'=>'-06-09','states'=>array('Murcia')),
                           'Day of La Rioja'=>array('date'=>'-06-09','states'=>array('La Rioja')),
-                          
                           'San Antonio'=>array('date'=>'-06-13','states'=>array('Ceuta')),
                           'Corpus Christi'=>array('method'=>'addCorpusChristi','states'=>array('Castilla-La Mancha')),
-                          
                           'Labour Day'=>array('date'=>'-05-01'),
-                          
                           'St John’s Day'=>array('date'=>'-06-24','states'=>array('Catalonia')),
                           'Eid al-Adha'=>array('method'=>'addEidalAdha','states'=>array('Ceuta','Melilla')),
                           'St James’ Day'=>array('date'=>'-06-24','states'=>array('Basque Country','Navarre')),
@@ -56,9 +48,7 @@ class es{
                           'Cantabrian Institutions Day'=>array('date'=>'-07-28','states'=>array('Cantabria')),
                           'Santa Maria de Africa'=>array('date'=>'-08-05','states'=>array('Ceuta')),
                           'The Day of Cantabria'=>array('date'=>'-08-14','states'=>array('Cantabria')),
-                          
                           'Assumption Day'=>array('date'=>'-08-15'),
-                          
                           'Day of Ceuta'=>array('date'=>'-09-02','states'=>array('Ceuta')),
                           'Day of Asturias'=>array('date'=>'-09-08','states'=>array('Asturias')),
                           'Day of Extremadura'=>array('date'=>'-09-08','states'=>array('Extremadura')),
@@ -66,21 +56,14 @@ class es{
                           'Day of the Bien Aparecida'=>array('date'=>'-09-15','states'=>array('Cantabria')),
                           'Day of Melilla'=>array('date'=>'-09-17','states'=>array('Melilla')),
                           'Day of Valencia'=>array('date'=>'-10-09','states'=>array('Valencia')),
-                          
                           'Spain’s National Day'=>array('date'=>'-10-12'),
                           'All Saints’ Day'=>array('date'=>'-11-01'),
-                          
                           'San Francisco Javier'=>array('date'=>'-12-03','states'=>array('Navarre')),
-                          
                           'Spanish Constitution Day'=>array('date'=>'-12-06'),
                           'Immaculate Conception'=>array('date'=>'-12-08'),
-                          
-                          
                           'Saint Stephen’s Day'=>array('date'=>'-12-26','states'=>array('Catalonia')),
-                          
                           'Christmas Day'=>array('date'=>'-12-25'),
                           'Christmas holiday'=>array('date'=>'-12-26'),
-                          
                           );
 
     private $easterSundayDtObjs=array();
