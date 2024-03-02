@@ -13,6 +13,7 @@ mb_internal_encoding("UTF-8");
 
 require_once('../../vendor/autoload.php');
 
+/*
 require_once('../php/uk.php');
 $uk=new uk();
 $bankHolidaysUK=$uk->getBankHolidays();
@@ -20,6 +21,10 @@ $bankHolidaysUK=$uk->getBankHolidays();
 require_once('../php/de.php');
 $de=new de();
 $bankHolidaysDE=$de->getBankHolidays();
+*/
+require_once('../php/uk.php');
+$de=new uk();
+$bankHolidays=$de->getBankHolidays();
 
-var_dump($bankHolidaysUK);
+var_dump($bankHolidays);
 ?>

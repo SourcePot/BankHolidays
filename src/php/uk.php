@@ -16,8 +16,8 @@ class uk{
     private $baseUri='https://www.gov.uk';
     
     private $events=array('England and Wales'=>'/bank-holidays/england-and-wales.ics',
-                          'Northern Ireland'=>'/bank-holidays/scotland.ics',
-                          'Scottland'=>'/bank-holidays/northern-ireland.ics',
+                          'Scottland'=>'/bank-holidays/scotland.ics',
+                          'Northern Ireland'=>'/bank-holidays/northern-ireland.ics',
                          );
     private $headers=array();
     
@@ -70,10 +70,9 @@ class uk{
                         }
                     }
                     if (!empty($event['start']) && !empty($event['end']) && !empty($event['summary']) && !empty($event['uid'])){
-                        $description=$event['summary'].' '.substr($event['start'],0,4);
-                        $id=md5($description);
-                        $eventsArr[$country][$id]['Event']=array('Description'=>$event['summary'],
-                                                                'Type'=>'Bankholiday UK',
+                        $id=md5($event['summary'].' '.substr($event['start'],0,4).' UK');
+                        $eventsArr[$country][$id]['Event']=array('Description'=>$event['summary'].' (UK)',
+                                                                'Type'=>'Bankholiday',
                                                                 'Start'=>substr($event['start'],0,4).'-'.$event['start'][4].$event['start'][5].'-'.$event['start'][6].$event['start'][7].' 00:00:00',
                                                                 'Start timezone'=>'Europe/London',
                                                                 'End'=>substr($event['end'],0,4).'-'.$event['end'][4].$event['end'][5].'-'.$event['end'][6].$event['end'][7].' 00:00:00',
@@ -84,7 +83,7 @@ class uk{
                                                                 'source'=>$this->baseUri.$eventUri,
                                                                 'uid'=>$event['uid'],
                                                                 );
-                        $eventsArr[$country][$id]['Location/Destination']=array('Country'=>'United Kingdom');
+                        $eventsArr[$country][$id]['Location/Destination']=array('Country'=>$country);
                     } else {
                         $msg=$eventUri.' failed to parse event "'.$eventIndex.'" defined by: '.$eventStr;
                         $eventsArr[$country]['warning']=(isset($eventsArr[$country]['warning']))?$eventsArr[$country]['warning'].'|'.$msg:$msg;

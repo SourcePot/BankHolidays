@@ -85,9 +85,9 @@ class de{
                     $msg='No valid "start" and/or "end" date found for '.$description.' '.$year;
                     $eventsArr['Germany']['warning']=(isset($eventsArr['Germany']['warning']))?$eventsArr['Germany']['warning'].'|'.$msg:$msg;
                 } else {
-                    $id=md5($description.' '.$year);
-                    $eventsArr['Germany'][$id]['Event']=array('Description'=>$description,
-                                                            'Type'=>'Bankholiday DE',
+                    $id=md5($description.' '.$year.' DE');
+                    $eventsArr['Germany'][$id]['Event']=array('Description'=>$description.' (DE)',
+                                                            'Type'=>'Bankholiday',
                                                             'Start'=>$eventDef['start'],
                                                             'Start timezone'=>self::TIMEZONE,
                                                             'End'=>$eventDef['end'],
