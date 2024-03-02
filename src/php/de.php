@@ -71,7 +71,10 @@ class de{
                 if (!isset($eventDef['states'])){
                     $eventDef['states']=$this->allStates;
                 }
-                if (!empty($eventDef['date'])){
+                if (!empty($eventDef['start']) && !empty($eventDef['end'])){
+                    $eventDef['start']=$year.$eventDef['start'];
+                    $eventDef['end']=$year.$eventDef['end'];
+                } else if (!empty($eventDef['date'])){
                     if ($eventDef['date'][0]=='-'){
                         $eventDef['date']=$year.$eventDef['date'];
                     }
