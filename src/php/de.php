@@ -189,5 +189,6 @@ class de{
         $eventDef['end']=$date.' 23:59:59';
         return $eventDef;
     }
+    
 }
 ?>
