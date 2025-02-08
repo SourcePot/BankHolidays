@@ -1,6 +1,6 @@
 # Bank Holidays
 
-The respository contains one PHP class per country. These classes contain the method getBankHolidays() which returns an array with the bank holidays.
+The repository contains one PHP class per country. These classes contain the method getBankHolidays() which returns an array with the bank holidays.
 If no argument is provided, method getBankHolidays() returns at least the bank holidays of the current year.
 
 Depending on the country, a goverment internet resource is used (such as *Gov.uk*) or dates are derived from rules (such as for Germany).
@@ -13,13 +13,11 @@ Just set your www-root directory to `{target dir}/src/www/`.
 
 For bank holidays of the United Kongdom you can instantiate class uk as follows:
 
-`require_once('../../vendor/autoload.php');`
-
-`require_once('../php/uk.php');`
-
-`$uk = new uk();`
-
-`$bankHolidaysUK = $uk->getBankHolidays();`
+```
+require_once('../../vendor/autoload.php');
+$uk = new SourcePot\BankHolidays\uk();
+$bankHolidaysUK = $uk->getBankHolidays();
+```
 
 ## Example
 
