@@ -19,7 +19,7 @@ class uk{
                           'Scottland'=>'/bank-holidays/scotland.ics',
                           'Northern Ireland'=>'/bank-holidays/northern-ireland.ics',
                          );
-    private $headers=array();
+    private $headers=[];
     
     private $client=FALSE;
 
@@ -41,9 +41,9 @@ class uk{
     public function getBankHolidays():array
     {
         $keys=array('start'=>'DTSTART;VALUE=DATE:','end'=>'DTEND;VALUE=DATE:','summary'=>'SUMMARY:','uid'=>'UID:');
-        $eventsArr=array();
+        $eventsArr=[];
         foreach($this->events as $country=>$eventUri){
-            $eventsArr[$country]=array();
+            $eventsArr[$country]=[];
             // get ics calendar
             try{
                 $response=$this->client->request('GET',$eventUri);
@@ -61,7 +61,7 @@ class uk{
                 $events=explode('END:VEVENT',$icsString);
                 array_pop($events);
                 foreach($events as $eventIndex=>$eventStr){
-                    $event=array();
+                    $event=[];
                     $eventLines=explode("\n",$eventStr);
                     foreach($eventLines as $eventLineIndex=>$eventLine){
                         foreach($keys as $key=>$needle){
@@ -102,7 +102,7 @@ class uk{
     
     private function header2arr(array $headers):array
     {
-        $arr=array();
+        $arr=[];
         foreach($headers as $key=>$header){
             foreach($header as $index=>$value){
                 $values=explode(';',$value);

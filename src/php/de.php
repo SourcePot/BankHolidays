@@ -37,9 +37,9 @@ class de{
                           "Saint Sylvester's Day"=>array('start'=>'-12-31 12:00:00','end'=>'-12-31 23:59:59'),
                           );
 
-    private $easterSundayDtObjs=array();
+    private $easterSundayDtObjs=[];
 
-    private $frelevantYears=array();
+    private $frelevantYears=[];
     
     public function __construct($relevantYears=FALSE)
     {
@@ -58,7 +58,7 @@ class de{
 
     public function getBankHolidays():array
     {
-        $eventsArr=array();
+        $eventsArr=[];
         foreach($this->relevantYears as $relevantYear){
             $year=str_pad(strval($relevantYear),4,"0",STR_PAD_LEFT);
             // get relevant year easter DateTime

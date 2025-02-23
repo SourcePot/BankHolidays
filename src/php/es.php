@@ -66,9 +66,9 @@ class es{
                           'Christmas holiday'=>array('date'=>'-12-26'),
                           );
 
-    private $easterSundayDtObjs=array();
+    private $easterSundayDtObjs=[];
 
-    private $frelevantYears=array();
+    private $frelevantYears=[];
     
     public function __construct($relevantYears=FALSE)
     {
@@ -87,7 +87,7 @@ class es{
 
     public function getBankHolidays():array
     {
-        $eventsArr=array();
+        $eventsArr=[];
         foreach($this->relevantYears as $relevantYear){
             $year=str_pad(strval($relevantYear),4,"0",STR_PAD_LEFT);
             // get relevant year easter DateTime
