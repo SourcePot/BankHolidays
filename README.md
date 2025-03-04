@@ -1,6 +1,6 @@
 # Bank Holidays
 
-The repository contains the PHP class `SourcePot\BankHolidays\holidays` which provides country and regionas specific holidays as event-arrays. The country-specific bank holidays are derived from different sources such as the goverment (for the UK from *Gov.uk*) or calculated from rules . 
+The repository contains the PHP class `SourcePot\BankHolidays\holidays` which provides country and regions specific holidays as event-arrays. The country-specific bank holidays are derived from different sources such as the goverment (for the UK from *Gov.uk*) or calculated from rules. 
 
 Depending on the country, dates are derived from rules (such as for Germany) or a goverment internet resource is used (such as *Gov.uk*).
 
@@ -24,7 +24,6 @@ $holidayObj = new holidays($year,$country);
 foreach($holidayObj->getHolidays('Bavaria') as $event){
     var_dump($event);
 }
-
 ```
 
 ## Test web page
