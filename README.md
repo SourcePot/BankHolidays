@@ -9,7 +9,7 @@ Just set your www-root directory to `{target dir}/src/www/`.
 
 ## Code samples
 
-The following code dample creates an instance of the holiday object for the year *2025* and country *Germany*. Method  getHolidays('Bavaria')
+The following code sample creates an instance of the holiday object for the year *2025* and country *Germany*. Method `SourcePot\BankHolidays\holidays→getHolidays('Bavaria')` is a holiday iterator, returning an holiday event with every iteration.
 
 ```
 namespace SourcePot\BankHolidays;
