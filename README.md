@@ -10,7 +10,6 @@ Depending on the country, dates are derived from rules (such as for Germany) or 
 You can install the www-project using composer: `composer create-project sourcepot/bankholidays {target dir}`
 Just set your www-root directory to `{target dir}/src/www/`.
 
-
 ## Code samples
 
 The following code sample creates an instance of the holiday object for the year *2025* and country *Germany*. Method `SourcePot\BankHolidays\holidays→getHolidays('Bavaria')` is a holiday iterator, returning an holiday event with every iteration.
