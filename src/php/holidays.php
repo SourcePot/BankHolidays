@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace SourcePot\BankHolidays;
 
-class main{
+class holidays{
 
     private $holidayObj;
     

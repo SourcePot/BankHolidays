@@ -11,9 +11,9 @@ namespace SourcePot\BankHolidays;
 	
 mb_internal_encoding("UTF-8");
 
-require_once('../php/main.php');
+require_once('../php/holidays.php');
 
-$availableCountries=main::getAvailableCountries();
+$availableCountries=holidays::getAvailableCountries();
 if (empty($_POST['country-code'])){$countryCode='de';} else {$countryCode=$_POST['country-code'];}
 if (empty($_POST['region'])){$region='Bavaria';} else {$region=$_POST['region'];}
 
@@ -32,16 +32,15 @@ $html.='</div>';
 $html.='</form>';
 
 
-$bankHolidayObj=new main(intval(date('Y')),$countryCode);
+$holidayObj=new holidays(intval(date('Y')),$countryCode);
 
-$regions=main::getAvailableRegions($countryCode);
-$html.=$bankHolidayObj->value2html($regions,'Available regions in '.$availableCountries[$countryCode]);
+$regions=holidays::getAvailableRegions($countryCode);
+$html.=$holidayObj->value2html($regions,'Available regions in '.$availableCountries[$countryCode]);
 
 $selectedRegion=$regions[array_rand($regions,1)];
-foreach($bankHolidayObj->datapoolHolidays($selectedRegion) as $event){
-    $html.=$bankHolidayObj->value2html($event,'Event "'.$event['Name'].'" in '.$selectedRegion);
+foreach($holidayObj->getHolidays($selectedRegion) as $event){
+    $html.=$holidayObj->value2html($event,'"'.$event['Name'].'" in '.$selectedRegion);
 }
-
 
 $html.='</body></html>';
 echo $html;
