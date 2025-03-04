@@ -16,7 +16,10 @@ namespace SourcePot\BankHolidays;
 	
 require_once('../php/holidays.php');
 
-$holidayObj = new holidays(2025,'de');
+$year=2025;
+$country='de';
+
+$holidayObj = new holidays($year,$country);
 
 foreach($holidayObj->getHolidays('Bavaria') as $event){
     var_dump($event);
