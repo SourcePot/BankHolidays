@@ -1,15 +1,15 @@
 # Bank Holidays
 
-The repository contains the PHP class `SourcePot\BankHolidays\holidays` which provides holidays specific to a selected country and regionas event-array. Country-specific bank holidays are derived from different sources, e.g. for the UK from *Gov.uk*, for Germany the days are calculated based on rules. 
+The repository contains the PHP class `SourcePot\BankHolidays\holidays` which provides country and regionas specific holidays as event-arrays. The country-specific bank holidays are derived from different sources such as the goverment (for the UK from *Gov.uk*) or calculated from rules . 
 
-Depending on the country, a goverment internet resource is used (such as *Gov.uk*) or dates are derived from rules (such as for Germany).
+Depending on the country, dates are derived from rules (such as for Germany) or a goverment internet resource is used (such as *Gov.uk*).
 
 You can install the www-project using composer: `composer create-project sourcepot/bankholidays {target dir}`
 Just set your www-root directory to `{target dir}/src/www/`.
 
 ## Code samples
 
-The following code dample creates an instance of the holiday object for the year 2025 and country Germany. 
+The following code dample creates an instance of the holiday object for the year *2025* and country *Germany*. Method  getHolidays('Bavaria')
 
 ```
 namespace SourcePot\BankHolidays;
