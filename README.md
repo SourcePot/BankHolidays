@@ -4,11 +4,12 @@ The repository contains the PHP class `SourcePot\BankHolidays\holidays` which pr
 
 Depending on the country, dates are derived from rules (such as for Germany) or a goverment internet resource is used (such as *Gov.uk*).
 
+>[!NOTE]
+>The UK bank holidays cover only a couple of years into the past and future.
+
 You can install the www-project using composer: `composer create-project sourcepot/bankholidays {target dir}`
 Just set your www-root directory to `{target dir}/src/www/`.
 
->[!NOTE]
->The UK bank holidays cover only a couple of years into the past and future0.
 
 ## Code samples
 
