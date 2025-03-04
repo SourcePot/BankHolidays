@@ -13,117 +13,104 @@ use GuzzleHttp\Psr7\Request;
 
 class uk{
 
-    private $baseUri='https://www.gov.uk';
-    
-    private $events=array('England and Wales'=>'/bank-holidays/england-and-wales.ics',
-                          'Scottland'=>'/bank-holidays/scotland.ics',
-                          'Northern Ireland'=>'/bank-holidays/northern-ireland.ics',
-                         );
-    private $headers=[];
-    
-    private $client=FALSE;
+    private const URL_PREFIX='https://www.gov.uk';
+    private const URL_SUFFIXES=['England and Wales'=>'/bank-holidays/england-and-wales.ics','Scottland'=>'/bank-holidays/scotland.ics','Northern Ireland'=>'/bank-holidays/northern-ireland.ics',];
 
-    public function __construct()
-    {
-        $this->client = new \GuzzleHttp\Client(['base_uri'=>$this->baseUri]);
-    }
+    private const COUNTRY='United Kingdom';
+    private const REGIONS=['England and Wales','Scottland','Northern Ireland'];
+    private const TIMEZONES=['United Kingdom'=>'Europe/London'];
+
+    private $relevantYear;
     
-    public function getHeaders():array
+    public function __construct(int|NULL $relevantYear=NULL)
     {
-        return $this->headers;
+        $relevantYear=$relevantYear??intval(date('Y'));
+        $this->relevantYear=str_pad(strval($relevantYear),4,"0",STR_PAD_LEFT);
     }
-    
-    public function getCountries():array
+
+
+    static public function getCountry():string
     {
-        return array_keys($this->events);
+        return self::COUNTRY;
     }
-	
-    public function getBankHolidays():array
+
+    static public function getRegions():array
     {
-        $keys=array('start'=>'DTSTART;VALUE=DATE:','end'=>'DTEND;VALUE=DATE:','summary'=>'SUMMARY:','uid'=>'UID:');
-        $eventsArr=[];
-        foreach($this->events as $country=>$eventUri){
-            $eventsArr[$country]=[];
-            // get ics calendar
-            try{
-                $response=$this->client->request('GET',$eventUri);
-            } catch (\Exception $e){
-                $eventsArr[$country]['error']=trim(strip_tags($e->getMessage()));
-                continue;
-            }            
-            $this->headers[$country]=$response->getHeaders();
-            $icsHeaders=$this->header2arr($this->headers[$country]);
-            $icsString=$response->getBody()->getContents();
-            // parse ics string
-            if (empty($icsString)){
-                $eventsArr[$country]['error']=(isset($eventsArr[$country]['error']))?'|'.$eventUri.'empty response':$eventUri.'empty response';
-            } else if ($icsHeaders['Content-Type']==='text/calendar'){
-                $events=explode('END:VEVENT',$icsString);
-                array_pop($events);
-                foreach($events as $eventIndex=>$eventStr){
-                    $event=[];
-                    $eventLines=explode("\n",$eventStr);
-                    foreach($eventLines as $eventLineIndex=>$eventLine){
-                        foreach($keys as $key=>$needle){
-                            if (strpos($eventLine,$needle)===FALSE){continue;}
-                            $event[$key]=trim(str_replace($needle,'',$eventLine));
-                        }
-                    }
-                    if (!empty($event['start']) && !empty($event['end']) && !empty($event['summary']) && !empty($event['uid'])){
-                        $id=md5($event['summary'].' '.substr($event['start'],0,4).' UK');
-                        $eventsArr[$country][$id]['Event']=array('Description'=>$event['summary'].' (UK)',
-                                                                'Type'=>'Bankholiday',
-                                                                'Start'=>substr($event['start'],0,4).'-'.$event['start'][4].$event['start'][5].'-'.$event['start'][6].$event['start'][7].' 00:00:00',
-                                                                'Start timezone'=>'Europe/London',
-                                                                'End'=>substr($event['end'],0,4).'-'.$event['end'][4].$event['end'][5].'-'.$event['end'][6].$event['end'][7].' 00:00:00',
-                                                                'End timezone'=>'Europe/London',
-                                                                'Recurrence'=>'+0 day',
-                                                                'Recurrence times'=>0,
-                                                                'Recurrence id'=>$id,
-                                                                'source'=>$this->baseUri.$eventUri,
-                                                                'uid'=>$event['uid'],
-                                                                );
-                        $eventsArr[$country][$id]['Location/Destination']=array('Country'=>$country);
-                    } else {
-                        $msg=$eventUri.' failed to parse event "'.$eventIndex.'" defined by: '.$eventStr;
-                        $eventsArr[$country]['warning']=(isset($eventsArr[$country]['warning']))?$eventsArr[$country]['warning'].'|'.$msg:$msg;
-                    }
-                }
+        return self::REGIONS;
+    }
+
+    public function getRegionTimezone(string|NULL $region=self::COUNTRY):string
+    {
+        if (isset(self::TIMEZONES[$region])){
+            return self::TIMEZONES[$region];
+        } else if (in_array($region,self::REGIONS)){
+            return self::TIMEZONES[self::COUNTRY];
+        } else {
+            throw new \Exception('Unknown region "'.$region.'"');
+        }
+    }
+
+    public function bankHolidays(string $region):\Iterator
+    {
+        if (isset(self::URL_SUFFIXES[$region])){
+            $url=self::URL_PREFIX.self::URL_SUFFIXES[$region];
+            foreach($this->eventsFromGovUk($url,$region) as $event){
+                yield $event;
+            }
+        } else {
+            throw new \Exception('Unknown region "'.$region.'"');
+        }
+    }
+
+    private function eventsFromGovUk(string $url, string $region):\Iterator
+    {
+        $ics=@file_get_contents($url);
+        if (empty($ics)){return FALSE;}
+        $eventCunks=explode('BEGIN:VEVENT',$ics);
+        $calHeader=array_shift($eventCunks);
+        $eventTemplate=['Country'=>self::COUNTRY,'Region'=>$region,'Type'=>'Bank holiday'];
+        foreach($eventCunks as $eventChunk){
+            // ics chunk to array
+            $eventChunkArr=explode('END:VEVENT',$eventChunk);
+            $eventChunk=array_shift($eventChunkArr);
+            $eventArr=$this->ics2arr($eventChunk);
+            // create event from ics-array
+            if (strpos($eventArr['DTSTART'],$this->relevantYear)!==0 && strpos($eventArr['DTEND'],$this->relevantYear)!==0){continue;}
+            $event=$eventTemplate;
+            $event['Name']=$eventArr['SUMMARY'];
+            $event['Start']=$eventArr['DTSTART'];
+            $event['Start timezone']=$this->getRegionTimezone($region);
+            $event['End']=$eventArr['DTEND'];
+            $event['End timezone']=$this->getRegionTimezone($region);
+            yield $event;
+        }
+    }
+
+    private function ics2arr(string $ics):array
+    {
+        $result=[];
+        $lines=explode("\n",$ics);
+        foreach($lines as $line){
+            $dividerPos=strpos($line,':');
+            if ($dividerPos===FALSE){continue;}
+            $line=trim($line);
+            $key=substr($line,0,$dividerPos);
+            $keyArr=explode(';',$key);
+            $key=array_shift($keyArr);
+            $type=strval(array_shift($keyArr));
+            $value=substr($line,$dividerPos+1);
+            if (stripos($type,'DATE')!==FALSE){
+                $result[$key]=$value[0].$value[1].$value[2].$value[3].'-'.$value[4].$value[5].'-'.$value[6].$value[7].' 00:00:00';
+            } else if ($key==='DTSTAMP'){
+                $dateTime=new \DateTime($value);
+                $result[$key]=$dateTime->format('Y-m-d H:i:s');
             } else {
-                $msg=$eventUri.' Content-Type is "'.$icsHeaders['Content-Type'].'" but should be "text/calendar"';
-                $eventsArr[$country]['error']=(isset($eventsArr[$country]['error']))?$eventsArr[$country]['error'].'|'.$msg:$msg;
-            }
-            if (!empty($eventsArr[$country]['error'])){
-                $eventsArr[$country]['headers']=$this->headers[$country];
+                $result[$key]=$value;
             }
         }
-        return $eventsArr;
+        return $result;
     }
-    
-    private function header2arr(array $headers):array
-    {
-        $arr=[];
-        foreach($headers as $key=>$header){
-            foreach($header as $index=>$value){
-                $values=explode(';',$value);
-                foreach($values as $subIndex=>$keyValue){
-                    $tmpComps=explode('=',$keyValue);
-                    if (count($tmpComps)===2){
-                        $arr[$key.'|'.$tmpComps[0]]=$tmpComps[1];
-                    } else {
-                        if (isset($arr[$key])){
-                            if (!is_array($arr[$key])){
-                                $arr[$key]=array(0=>$arr[$key]);
-                            }
-                            $arr[$key][]=$keyValue;
-                        } else {
-                            $arr[$key]=$keyValue;
-                        }
-                    }
-                }
-            }
-        }
-        return $arr;
-    }
+
+
 }
 ?>

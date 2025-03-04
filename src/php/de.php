@@ -10,184 +10,170 @@ namespace SourcePot\BankHolidays;
 
 class de{
     
-    const TIMEZONE='Europe/Berlin';
+    private const COUNTRY='Germany';
+    private const EASTER_CALENDAR=CAL_EASTER_DEFAULT;
+    private const REGIONS=['Augsburg','Baden-Württemberg','Bavaria','Berlin','Brandenburg','Bremen','Hamburg','Hesse','Lower Saxony','Mecklenburg-Vorpommern','North Rhine-Westphalia','Rhineland-Palatinate','Saarland','Saxony','Saxony-Anhalt','Schleswig-Holstein','Thuringia'];
+    private const TIMEZONES=['Germany'=>'Europe/Berlin'];
+
+    private $events=['New Years’ Day'=>['date'=>'-01-01','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Three Kings Day'=>['date'=>'-01-06','country'=>self::COUNTRY,'regions'=>['Augsburg','Baden-Württemberg','Bavaria','Saxony-Anhalt'],],
+                    "Women's Day"=>['date'=>'-03-08','country'=>self::COUNTRY,'regions'=>self::REGIONS,'type'=>'Commemorative day'],
+                    'Good Friday'=>['method'=>'addGoodFriday','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Easter Sunday'=>['method'=>'addEasterSunday','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Easter Monday'=>['method'=>'addEasterMonday','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Labour Day'=>['date'=>'-05-01','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Ascension Day'=>['method'=>'addAscensionDay','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Whitsunday'=>['method'=>'addWhitsunday','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Whitmonday'=>['method'=>'addWhitmonday','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Corpus Christi'=>['method'=>'addCorpusChristi','country'=>self::COUNTRY,'regions'=>['Augsburg','Baden-Württemberg','Bavaria','Hesse','North Rhine-Westphalia','Rhineland-Palatinate','Saarland'],],
+                    'Hohes Friedensfest'=>['date'=>'-08-08','country'=>self::COUNTRY,'regions'=>['Augsburg'],],
+                    'Assumption Day'=>['date'=>'-08-15','country'=>self::COUNTRY,'regions'=>['Augsburg','Bavaria'],],
+                    "World Children's Day"=>['date'=>'-09-20','country'=>self::COUNTRY,'regions'=>self::REGIONS,'type'=>'Commemorative days'],
+                    'German Unification Day'=>['date'=>'-10-03','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Reformation Day'=>['date'=>'-10-31','country'=>self::COUNTRY,'regions'=>['Brandenburg','Bremen','Hamburg','Mecklenburg-Vorpommern','Lower Saxony','Saxony','Saxony-Anhalt','Schleswig-Holstein','Thuringia'],],
+                    'All Saints’ Day'=>['date'=>'-11-01','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Day of Repentance & Prayer'=>['method'=>'addDayOfRepentance','country'=>self::COUNTRY,'regions'=>['Saxony'],],
+                    'Holy Night'=>['start'=>'-12-24 12:00:00','end'=>'-12-24 23:59:59','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Christmas Day'=>['date'=>'-12-25','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    'Boxing Day'=>['date'=>'-12-26','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    "Saint Sylvester’s Day"=>['start'=>'-12-31 12:00:00','end'=>'-12-31 23:59:59','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
+                    ];
+
+    private $relevantYear;
+    private $easterSundayDtObj;
     
-    private $allStates=array('Baden-Württemberg','Bavaria','Berlin','Brandenburg','Bremen','Hamburg','Hesse','Lower Saxony','Mecklenburg-Vorpommern','North Rhine-Westphalia','Rhineland-Palatinate','Saarland','Saxony','Saxony-Anhalt','Schleswig-Holstein','Thuringia');
-
-    private $events=array('New Years’ Day'=>array('date'=>'-01-01'),
-                          'Three Kings Day'=>array('date'=>'-01-06'),
-                          "Women's Day"=>array('date'=>'-03-08'),
-                          'Good Friday'=>array('method'=>'addGoodFriday'),
-                          'Easter Sunday'=>array('method'=>'addEasterSunday'),
-                          'Easter Monday'=>array('method'=>'addEasterMonday'),
-                          'Labour Day'=>array('date'=>'-05-01'),
-                          'Ascension Day'=>array('method'=>'addAscensionDay'),
-                          'Whitsunday'=>array('method'=>'addWhitsunday'),
-                          'Whitmonday'=>array('method'=>'addWhitmonday'),
-                          'Corpus Christi'=>array('method'=>'addCorpusChristi','states'=>array('Baden-Württemberg','Bavaria','Hesse','North Rhine-Westphalia','Rhineland-Palatinate','Saarland')),
-                          'Assumption Day'=>array('date'=>'-08-15','states'=>array('Bavaria')),
-                          "World Children's Day"=>array('date'=>'-09-20'),
-                          'German Unification Day'=>array('date'=>'-10-03'),
-                          'Reformation Day'=>array('date'=>'-10-31'),
-                          'All Saints’ Day'=>array('date'=>'-11-01'),
-                          'Day of Repentance & Prayer'=>array('method'=>'addDayOfRepentance'),
-                          'Holy Night'=>array('start'=>'-12-24 12:00:00','end'=>'-12-24 23:59:59'),
-                          'Christmas Day'=>array('date'=>'-12-25'),
-                          'Boxing Day'=>array('date'=>'-12-26'),
-                          "Saint Sylvester's Day"=>array('start'=>'-12-31 12:00:00','end'=>'-12-31 23:59:59'),
-                          );
-
-    private $easterSundayDtObjs=[];
-
-    private $frelevantYears=[];
-    
-    public function __construct($relevantYears=FALSE)
+    public function __construct(int|NULL $relevantYear=NULL)
     {
-        $currentYear=intval(date('Y'));
-        if (is_array($relevantYears)){
-            $this->relevantYears=$relevantYears;
+        $relevantYear=$relevantYear??intval(date('Y'));
+        $this->relevantYear=str_pad(strval($relevantYear),4,"0",STR_PAD_LEFT);
+    }
+
+    static public function getCountry():string
+    {
+        return self::COUNTRY;
+    }
+
+    static public function getRegions():array
+    {
+        return self::REGIONS;
+    }
+
+    public function getRegionTimezone(string|NULL $region=self::COUNTRY):string
+    {
+        if (isset(self::TIMEZONES[$region])){
+            return self::TIMEZONES[$region];
+        } else if (in_array($region,self::REGIONS)){
+            return self::TIMEZONES[self::COUNTRY];
         } else {
-            $this->relevantYears=[($currentYear-1),$currentYear,($currentYear+1)];
+            throw new \Exception('Unknown region "'.$region.'"');
         }
     }
 
-    public function getCountries():array
+    public function bankHolidays(string $region):\Iterator
     {
-        return array('Germany');
-    }
-
-    public function getBankHolidays():array
-    {
-        $eventsArr=[];
-        foreach($this->relevantYears as $relevantYear){
-            $year=str_pad(strval($relevantYear),4,"0",STR_PAD_LEFT);
-            // get relevant year easter DateTime
-            $easterTimestamp=easter_date(intval($year),CAL_EASTER_DEFAULT);
-            $timeZoneObj=new \DateTimeZone(self::TIMEZONE);
-            $this->easterSundayDtObjs[$year]=new \DateTime('@'.$easterTimestamp,$timeZoneObj);
-            $this->easterSundayDtObjs[$year]->modify('next sunday');
-            // get events
-            foreach($this->events as $description=>$eventDef){
-                if (!isset($eventDef['states'])){
-                    $eventDef['states']=$this->allStates;
+        $timezoneObj=new \DateTimeZone(self::getRegionTimezone($region));
+        // get relevant year easter DateTime
+        $easterTimestamp=easter_date(intval($this->relevantYear),self::EASTER_CALENDAR);
+        $this->easterSundayDtObj=new \DateTime('@'.$easterTimestamp);
+        $this->easterSundayDtObj->setTimezone($timezoneObj);
+        $this->easterSundayDtObj->modify('next sunday');
+        // get events
+        $eventTemplate=['Country'=>self::COUNTRY,'Region'=>$region];
+        foreach($this->events as $name=>$defArr){
+            if (!in_array($region,$defArr['regions'])){continue;}
+            $event=$eventTemplate;
+            $event['Name']=$name;
+            if (!empty($defArr['start']) && !empty($defArr['end'])){
+                $event['Start']=$this->relevantYear.$defArr['start'];
+                $event['End']=$this->relevantYear.$defArr['end'];
+            } else if (!empty($defArr['date'])){
+                if ($defArr['date'][0]=='-'){
+                    $defArr['date']=$this->relevantYear.$defArr['date'];
                 }
-                if (!empty($eventDef['start']) && !empty($eventDef['end'])){
-                    $eventDef['start']=$year.$eventDef['start'];
-                    $eventDef['end']=$year.$eventDef['end'];
-                } else if (!empty($eventDef['date'])){
-                    if ($eventDef['date'][0]=='-'){
-                        $eventDef['date']=$year.$eventDef['date'];
-                    }
-                    $eventDef['start']=$eventDef['date'].' 00:00:00';
-                    $eventDef['end']=$eventDef['date'].' 23:59:59';
-                } else if (!empty($eventDef['method'])){
-                    $method=$eventDef['method'];
-                    $eventDef=$this->$method($eventDef,$year);
-                }
-                if (empty($eventDef['start']) || empty($eventDef['end'])){
-                    $msg='No valid "start" and/or "end" date found for '.$description.' '.$year;
-                    $eventsArr['Germany']['warning']=(isset($eventsArr['Germany']['warning']))?$eventsArr['Germany']['warning'].'|'.$msg:$msg;
-                } else {
-                    $id=md5($description.' '.$year.' DE');
-                    $eventsArr['Germany'][$id]['Event']=array('Description'=>$description.' (DE)',
-                                                            'Type'=>'Bankholiday',
-                                                            'Start'=>$eventDef['start'],
-                                                            'Start timezone'=>self::TIMEZONE,
-                                                            'End'=>$eventDef['end'],
-                                                            'End timezone'=>self::TIMEZONE,
-                                                            'Recurrence'=>'+0 day',
-                                                            'Recurrence times'=>0,
-                                                            'Recurrence id'=>$id,
-                                                            'source'=>__CLASS__,
-                                                            'uid'=>$id,
-                                                            );
-                    $eventsArr['Germany'][$id]['Location/Destination']=array('Country'=>'Germany');
-                    if (isset($eventDef['states'])){
-                        $eventsArr['Germany'][$id]['Location/Destination']=array('States'=>$eventDef['states']);
-                    }
-                }
-                
+                $event['Start']=$defArr['date'].' 00:00:00';
+                $event['End']=$defArr['date'].' 23:59:59';
+            } else if (!empty($defArr['method'])){
+                $method=$defArr['method'];
+                $event=$this->$method($event,$timezoneObj);
+            } else {
+                throw new \Exception('Event definition error.'); 
             }
+            $event['Start timezone']=$timezoneObj->getName();
+            $event['End timezone']=$timezoneObj->getName();
+            $event['Type']=$defArr['type']??'Bank holiday';
+            yield $event;
         }
-        return $eventsArr;
     }
 
-    private function addGoodFriday(array $eventDef, string $year):array
+    private function addGoodFriday(array $event):array
     {
-        $easterSundayObj=$this->easterSundayDtObjs[$year];
-        $dtObj=clone $easterSundayObj;
+        $dtObj=clone $this->easterSundayDtObj;
         $date=$dtObj->modify('previous friday')->format('Y-m-d');
-        $eventDef['start']=$date.' 00:00:00';
-        $eventDef['end']=$date.' 23:59:59';
-        return $eventDef;
+        $event['Start']=$date.' 00:00:00';
+        $event['End']=$date.' 23:59:59';
+        return $event;
     }
 
-    private function addEasterSunday(array $eventDef, string $year):array
+    private function addEasterSunday(array $event):array
     {
-        $date=$this->easterSundayDtObjs[$year]->format('Y-m-d');
-        $eventDef['start']=$date.' 00:00:00';
-        $eventDef['end']=$date.' 23:59:59';
-        return $eventDef;
+        $date=$this->easterSundayDtObj->format('Y-m-d');
+        $event['Start']=$date.' 00:00:00';
+        $event['End']=$date.' 23:59:59';
+        return $event;
     }
 
-    private function addEasterMonday(array $eventDef, string $year):array
+    private function addEasterMonday(array $event):array
     {
-        $easterSundayObj=$this->easterSundayDtObjs[$year];
-        $dtObj=clone $easterSundayObj;
+        $dtObj=clone $this->easterSundayDtObj;
         $date=$dtObj->modify('next monday')->format('Y-m-d');
-        $eventDef['start']=$date.' 00:00:00';
-        $eventDef['end']=$date.' 23:59:59';
-        return $eventDef;
+        $event['Start']=$date.' 00:00:00';
+        $event['End']=$date.' 23:59:59';
+        return $event;
     }
 
-    private function addAscensionDay(array $eventDef, string $year):array
+    private function addAscensionDay(array $event):array
     {
-        $easterSundayObj=$this->easterSundayDtObjs[$year];
-        $dtObj=clone $easterSundayObj;
+        $dtObj=clone $this->easterSundayDtObj;
         $date=$dtObj->modify('+39 days')->format('Y-m-d');
-        $eventDef['start']=$date.' 00:00:00';
-        $eventDef['end']=$date.' 23:59:59';
-        return $eventDef;
+        $event['Start']=$date.' 00:00:00';
+        $event['End']=$date.' 23:59:59';
+        return $event;
     }
 
-    private function addWhitsunday(array $eventDef, string $year):array
+    private function addWhitsunday(array $event):array
     {
-        $easterSundayObj=$this->easterSundayDtObjs[$year];
-        $dtObj=clone $easterSundayObj;
+        $dtObj=clone $this->easterSundayDtObj;
         $date=$dtObj->modify('+49 days')->format('Y-m-d');
-        $eventDef['start']=$date.' 00:00:00';
-        $eventDef['end']=$date.' 23:59:59';
-        return $eventDef;
+        $event['Start']=$date.' 00:00:00';
+        $event['End']=$date.' 23:59:59';
+        return $event;
     }
 
-    private function addWhitmonday(array $eventDef, string $year):array
+    private function addWhitmonday(array $event):array
     {
-        $easterSundayObj=$this->easterSundayDtObjs[$year];
-        $dtObj=clone $easterSundayObj;
+        $dtObj=clone $this->easterSundayDtObj;
         $date=$dtObj->modify('+50 days')->format('Y-m-d');
-        $eventDef['start']=$date.' 00:00:00';
-        $eventDef['end']=$date.' 23:59:59';
-        return $eventDef;
+        $event['Start']=$date.' 00:00:00';
+        $event['End']=$date.' 23:59:59';
+        return $event;
     }
 
-    private function addCorpusChristi(array $eventDef, string $year):array
+    private function addCorpusChristi(array $event):array
     {
-        $easterSundayObj=$this->easterSundayDtObjs[$year];
-        $dtObj=clone $easterSundayObj;
+        $dtObj=clone $this->easterSundayDtObj;
         $date=$dtObj->modify('+60 days')->format('Y-m-d');
-        $eventDef['start']=$date.' 00:00:00';
-        $eventDef['end']=$date.' 23:59:59';
-        return $eventDef;
+        $event['Start']=$date.' 00:00:00';
+        $event['End']=$date.' 23:59:59';
+        return $event;
     }
 
-    private function addDayOfRepentance(array $eventDef, string $year):array
+    private function addDayOfRepentance(array $event, \DateTimeZone $timezoneObj):array
     {
-        $timeZoneObj=new \DateTimeZone(self::TIMEZONE);
-        $dtObj=new \DateTime('@'.strtotime($year.'-11-23'),$timeZoneObj);
+        $dtObj=new \DateTime($this->relevantYear.'-11-23 12:00:00',$timezoneObj);
         $date=$dtObj->modify('previous wednesday')->format('Y-m-d');
-        $eventDef['start']=$date.' 00:00:00';
-        $eventDef['end']=$date.' 23:59:59';
-        return $eventDef;
+        $event['Start']=$date.' 00:00:00';
+        $event['End']=$date.' 23:59:59';
+        return $event;
     }
     
 }
