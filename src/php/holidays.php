@@ -79,15 +79,15 @@ class holidays{
             $entry['EntryId']=md5(serialize($event));
             $entry['Start']=$startObj->format('Y-m-d H:i:s');
             $entry['End']=$endObj->format('Y-m-d H:i:s');
-            $entry['Name']=$event['Name'];
-            unset($event['Name']);
+            $entry['Name']=$event['Name'].' ('.$region.')';
             $entry['Group']=$event['Type'].'s';
             $entry['Folder']=$this->holidayObj::class;
             $entry['Content']['Location/Destination']=['Town'=>$event['Region'],'Country'=>$event['Country'],];
+            unset($event['Name']);
             unset($event['Region']);
             unset($event['Country']);
             $entry['Content']['Event']=$event;
-            $entry['Content']['Event']['Description']=$entry['Name'].' ('.$region.')';
+            $entry['Content']['Event']['Description']=$entry['Name'];
             yield $entry;
         }  
     }

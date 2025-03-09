@@ -28,7 +28,7 @@ class de{
                     'Corpus Christi'=>['method'=>'addCorpusChristi','country'=>self::COUNTRY,'regions'=>['Augsburg','Baden-Württemberg','Bavaria','Hesse','North Rhine-Westphalia','Rhineland-Palatinate','Saarland'],],
                     'Hohes Friedensfest'=>['date'=>'-08-08','country'=>self::COUNTRY,'regions'=>['Augsburg'],],
                     'Assumption Day'=>['date'=>'-08-15','country'=>self::COUNTRY,'regions'=>['Augsburg','Bavaria'],],
-                    "World Children's Day"=>['date'=>'-09-20','country'=>self::COUNTRY,'regions'=>self::REGIONS,'type'=>'Commemorative days'],
+                    "World Children's Day"=>['date'=>'-09-20','country'=>self::COUNTRY,'regions'=>self::REGIONS,'type'=>'Commemorative day'],
                     'German Unification Day'=>['date'=>'-10-03','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
                     'Reformation Day'=>['date'=>'-10-31','country'=>self::COUNTRY,'regions'=>['Brandenburg','Bremen','Hamburg','Mecklenburg-Vorpommern','Lower Saxony','Saxony','Saxony-Anhalt','Schleswig-Holstein','Thuringia'],],
                     'All Saints’ Day'=>['date'=>'-11-01','country'=>self::COUNTRY,'regions'=>self::REGIONS,],
