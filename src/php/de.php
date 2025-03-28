@@ -74,9 +74,10 @@ class de{
         $timezoneObj=new \DateTimeZone(self::getRegionTimezone($region));
         // get relevant year easter DateTime
         $easterTimestamp=easter_date(intval($this->relevantYear),self::EASTER_CALENDAR);
-        $this->easterSundayDtObj=new \DateTime('@'.$easterTimestamp);
-        $this->easterSundayDtObj->setTimezone($timezoneObj);
-        $this->easterSundayDtObj->modify('next sunday');
+        $this->easterSundayDtObj=new \DateTime(date('Y-m-d',$easterTimestamp),$timezoneObj);
+        if ($this->easterSundayDtObj->format('l')!=='Sunday'){
+            $this->easterSundayDtObj->modify('next sunday');
+        }
         // get events
         $eventTemplate=['Country'=>self::COUNTRY,'Region'=>$region];
         foreach($this->events as $name=>$defArr){
